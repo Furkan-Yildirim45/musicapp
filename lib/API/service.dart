@@ -1,0 +1,84 @@
+import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+class AuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final Dio _dio = Dio();
+
+  // Kullanıcıyı giriş yapma
+  Future<User?> login(String email, String password) async {
+    try {
+      final response = await _dio.post(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyChIeD0pPZGJc2uEDwyzN2DxegBSIdZF2Y',
+        data: {
+          'email': email,
+          'password': password,
+          'returnSecureToken': true,
+        },
+      );
+
+      // Firebase'den dönen kullanıcı bilgilerini al
+      final user = response.data;
+      print("Giriş yanıtı: $user"); // Yanıtı yazdır
+
+      // Kullanıcı girişi başarılı ise, kullanıcıyı döndür
+      if (user != null && user['idToken'] != null) {
+        // Kullanıcıyı döndür
+        return _auth.currentUser; // Burada kullanıcıyı döndür
+      } else {
+        print("Giriş başarısız: ${user['error']['message']}");
+        return null;
+      }
+    } catch (e) {
+      if (e is DioException) {
+        print("Login error: ${e.response?.data}"); // Hata detayını yazdır
+      } else {
+        print("Login error: $e");
+      }
+      return null;
+    }
+  }
+
+  // Kullanıcı kaydı
+  Future<User?> register(String email, String password) async {
+    try {
+      final response = await _dio.post(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyChIeD0pPZGJc2uEDwyzN2DxegBSIdZF2Y',
+        data: {
+          'email': email,
+          'password': password,
+          'returnSecureToken': true,
+        },
+      );
+
+      // Firebase'den dönen kullanıcı bilgilerini al
+      final user = response.data;
+      print("Kayıt yanıtı: $user"); // Yanıtı yazdır
+
+      // Kullanıcı kaydı başarılı ise, kullanıcıyı döndür
+      if (user != null && user['idToken'] != null) {
+        // Kullanıcıyı oturum açtır
+        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        return userCredential.user; // Kullanıcıyı döndür
+      } else {
+        print("Kullanıcı kaydedilemedi: ${user['error']['message']}");
+        return null;
+      }
+    } catch (e) {
+      if (e is DioException) {
+        print("Registration error: ${e.response?.data}"); // Hata detayını yazdır
+      } else {
+        print("Registration error: $e");
+      }
+      return null;
+    }
+  }
+
+  // Kullanıcıyı çıkış yapma
+  Future<void> logout() async {
+    await _auth.signOut();
+  }
+} 

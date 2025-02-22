@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:main_app_structure/controllers/home_view_controller.dart';
+import 'package:main_app_structure/controllers/home/home_view_controller.dart';
 import 'package:main_app_structure/product/navigator/navigate_route_items.dart';
 import 'package:main_app_structure/product/navigator/navigator_controller.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_colors.dart';
@@ -305,7 +305,7 @@ class HomeView extends StatelessWidget {
     return InkWell(
       onTap: () {
         NavigatorController.instance.pushToPage(
-          NavigateRoutesItems.trackDetail,
+          NavigateRoutesItems.artistDetail,
           arguments: artist,
         );
       },
@@ -322,7 +322,7 @@ class HomeView extends StatelessWidget {
               width: 90,
               height: 150,
               fit: BoxFit.cover,
-            ), // Resim boyutunu ayarlayın
+            ),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

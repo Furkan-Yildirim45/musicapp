@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:main_app_structure/controllers/auth/login_controller.dart';
 import 'package:main_app_structure/product/navigator/navigate_route_items.dart';
 import 'package:main_app_structure/product/navigator/navigator_controller.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_colors.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_general.dart';
 
 class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+  LoginView({super.key});
+
+  final LoginController controller = Get.put(LoginController());
+    final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +53,7 @@ class LoginView extends StatelessWidget {
               Container(
                 color: const Color(0xffF4F4FF),
                 child: TextField(
-                  controller: TextEditingController(),
+                  controller: _emailController,
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
                     hintText: "john@mail.com",
@@ -72,7 +78,7 @@ class LoginView extends StatelessWidget {
               Container(
                 color: const Color(0xffF4F4FF),
                 child: TextField(
-                  controller: TextEditingController(),
+                  controller: _passwordController,
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
                     hintText: "********",
@@ -126,7 +132,7 @@ class LoginView extends StatelessWidget {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
-              NavigatorController.instance.pushToPage(NavigateRoutesItems.home);
+              controller.login(_emailController.text, _passwordController.text);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xffEF6B4A),

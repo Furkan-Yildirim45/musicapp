@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:main_app_structure/controllers/menu_view_controller.dart';
+import 'package:main_app_structure/controllers/home/menu_view_controller.dart';
 import 'package:main_app_structure/models/artist_model.dart';
 import 'package:main_app_structure/models/track_model.dart';
 import 'package:main_app_structure/product/navigator/navigate_route_items.dart';

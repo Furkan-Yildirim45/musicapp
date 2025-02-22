@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:main_app_structure/controllers/track_detail_view_controller.dart';
+import 'package:main_app_structure/controllers/home/track_detail_view_controller.dart';
 import 'package:main_app_structure/product/navigator/navigator_controller.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_colors.dart';
 import 'package:main_app_structure/product/widgets/general/custom_elevated_button.dart';

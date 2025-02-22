@@ -7,17 +7,19 @@ import 'package:main_app_structure/view/home/track_detail_view.dart';
 import 'package:main_app_structure/view/login/login_view.dart';
 import 'package:main_app_structure/view/register/register_view.dart';
 import 'package:main_app_structure/view/splash/splash_view.dart';
+import 'package:main_app_structure/view/home/artist_detail_view.dart';
 
 
 class NavigatorRoutes {
   static const String init = "/";
   final List<GetPage<dynamic>>? routes = [
     GetPage(name: NavigatorRoutes.init, page: () => const SplashView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
-    GetPage(name: NavigateRoutesItems.login.withSlash, page: () => const LoginView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
-    GetPage(name: NavigateRoutesItems.register.withSlash, page: () => const RegisterView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
+    GetPage(name: NavigateRoutesItems.login.withSlash, page: () => LoginView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
+    GetPage(name: NavigateRoutesItems.register.withSlash, page: () => RegisterView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     GetPage(name: NavigateRoutesItems.home.withSlash, page: () => HomeView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     GetPage(name: NavigateRoutesItems.menu.withSlash, page: () => MenuView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
     GetPage(name: NavigateRoutesItems.trackDetail.withSlash, page: () => TrackDetailView(),transition: Transition.cupertino,transitionDuration: const Duration(milliseconds: 500),curve: Curves.easeInOut),
+    GetPage(name: NavigateRoutesItems.artistDetail.withSlash, page: () => ArtistDetailView(), transition: Transition.cupertino, transitionDuration: const Duration(milliseconds: 500), curve: Curves.easeInOut),
   ];
 }
 
@@ -30,6 +32,7 @@ enum NavigateRoutesItems {
   home,
   menu,
   trackDetail,
+  artistDetail,
 }
 
 extension NavigateRoutesItemsExtension on NavigateRoutesItems{

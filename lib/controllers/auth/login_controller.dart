@@ -1,0 +1,24 @@
+import 'package:get/get.dart';
+import 'package:main_app_structure/api/service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:main_app_structure/product/navigator/navigate_route_items.dart';
+import 'package:main_app_structure/product/navigator/navigator_controller.dart';
+
+class LoginController extends GetxController {
+  final AuthService _authService = AuthService();
+  var isLoading = false.obs;
+
+  Future<void> login(String email, String password) async {
+    isLoading.value = true;
+    User? user = await _authService.login(email, password);
+    isLoading.value = false;
+
+    if (user != null) {
+      // Giriş başarılı, ana sayfaya yönlendir
+      NavigatorController.instance.pushAndRemoveUntil(NavigateRoutesItems.home);
+    } else {
+      // Hata durumunda kullanıcıya mesaj göster
+      Get.snackbar("Error", "Login failed. Please check your credentials.");
+    }
+  }
+}

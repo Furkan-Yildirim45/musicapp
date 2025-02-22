@@ -13,7 +13,8 @@ class HomeViewController extends GetxController {
       artist: 'The Weeknd',
       views: '11M listeners',
       image: 'assets/images/blinding_lights.png',
-      lyrics: 'I said, ooh, I\'m blinded by the lights...\nCan\'t sleep until I feel your touch...',
+      lyrics:
+          'I said, ooh, I\'m blinded by the lights...\nCan\'t sleep until I feel your touch...',
       duration: '3:20', // Örnek süre
       audioUrl: 'https://example.com/blinding_lights.mp3', // Örnek URL
     ),
@@ -22,7 +23,8 @@ class HomeViewController extends GetxController {
       artist: 'Ed Sheeran',
       views: '10M listeners',
       image: 'assets/images/shape_of_you.png',
-      lyrics: 'I\'m in love with the shape of you...\nWe push and pull like a magnet do...',
+      lyrics:
+          'I\'m in love with the shape of you...\nWe push and pull like a magnet do...',
       duration: '3:53', // Örnek süre
       audioUrl: 'https://example.com/shape_of_you.mp3', // Örnek URL
     ),
@@ -56,15 +58,73 @@ class HomeViewController extends GetxController {
       name: 'Adele',
       image: 'assets/images/adele.png',
       views: '120M',
+      tracks: [
+        TrackModel(
+          title: 'Hello',
+          artist: 'Adele',
+          views: '50M',
+          image: 'assets/images/adele.png',
+          lyrics: 'Hello from the other side...',
+          duration: '4:55',
+          audioUrl: 'https://example.com/hello.mp3',
+        ),
+        TrackModel(
+          title: 'Someone Like You',
+          artist: 'Adele',
+          views: '40M',
+          image: 'assets/images/adele.png',
+          lyrics: 'Never mind, I\'ll find someone like you...',
+          duration: '4:45',
+          audioUrl: 'https://example.com/someone_like_you.mp3',
+        ),
+        TrackModel(
+          title: 'Hello',
+          artist: 'Adele',
+          views: '50M',
+          image: 'assets/images/adele.png',
+          lyrics: 'Hello from the other side...',
+          duration: '4:55',
+          audioUrl: 'https://example.com/hello.mp3',
+        ),
+        TrackModel(
+          title: 'Someone Like You',
+          artist: 'Adele',
+          views: '40M',
+          image: 'assets/images/adele.png',
+          lyrics: 'Never mind, I\'ll find someone like you...',
+          duration: '4:45',
+          audioUrl: 'https://example.com/someone_like_you.mp3',
+        ),
+      ],
     ),
     ArtistModel(
       name: 'Drake',
       image: 'assets/images/drake.png',
       views: '90M',
+      tracks: [
+        TrackModel(
+          title: 'God\'s Plan',
+          artist: 'Drake',
+          views: '30M',
+          image: 'assets/images/drake.png',
+          lyrics: 'I can\'t do this on my own...',
+          duration: '3:19',
+          audioUrl: 'https://example.com/gods_plan.mp3',
+        ),
+        TrackModel(
+          title: 'In My Feelings',
+          artist: 'Drake',
+          views: '25M',
+          image: 'assets/images/drake.png',
+          lyrics: 'Kiki, do you love me...',
+          duration: '3:37',
+          audioUrl: 'https://example.com/in_my_feelings.mp3',
+        ),
+      ],
     ),
   ];
 
   void selectCategory(String category) {
     selectedCategory.value = category; // Seçilen kategoriyi güncelle
   }
-} 
+}
