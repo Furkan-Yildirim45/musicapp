@@ -1,62 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:main_app_structure/controllers/home_view_controller.dart';
+import 'package:main_app_structure/product/navigator/navigate_route_items.dart';
+import 'package:main_app_structure/product/navigator/navigator_controller.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_colors.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+  final HomeViewController controller = Get.put(HomeViewController());
+
+  HomeView({super.key}); // Controller'ı oluştur
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Image.asset("assets/images/logo.png",
-        width: 56,
-        height: 56,),
+        title: Image.asset(
+          "assets/images/logo.png",
+          width: 56,
+          height: 56,
+        ),
         backgroundColor: AppColor.white.getColor(), // Spotify yeşili
         actions: const [
-          Text("Catalog",style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold
-          ),)
+          Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: Text(
+              "Catalog",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          )
         ],
       ),
       body: Column(
         children: [
-          Divider(color: Colors.grey[300],),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Kategoriler
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildCategoryButton('Pop'),
-                    _buildCategoryButton('Rock'),
-                    _buildCategoryButton('Hip-Hop'),
-                    _buildCategoryButton('Jazz'),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                // En Çok Dinlenenler
-                const Text(
-                  'Top Tracks',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                _buildTrackCard('Blinding Lights', 'The Weeknd', '3:20', 'assets/images/blinding_lights.png'),
-                _buildTrackCard('Shape of You', 'Ed Sheeran', '3:53', 'assets/images/shape_of_you.png'),
-                const SizedBox(height: 16),
-                // Popüler Sanatçılar
-                const Text(
-                  'Popular Artists',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                _buildArtistCard('Adele', 'assets/images/adele.png'),
-                _buildArtistCard('Drake', 'assets/images/drake.png'),
-              ],
+          Divider(
+            color: Colors.grey[300],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView(
+                children: [
+                  // Kategoriler
+                  SizedBox(
+                    height: 50, // Yüksekliği ayarlayın
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: controller.categories.length,
+                      itemBuilder: (context, index) {
+                        return _buildCategoryButton(
+                            controller.categories[index]);
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Arama Çubuğu
+                  _buildSearchBar(),
+                  const SizedBox(height: 16),
+                  // En Çok Dinlenenler
+                  _buildTopTracksSection(),
+                  const SizedBox(height: 16),
+                  // Yeni Çıkanlar
+                  _buildNewReleasesSection(),
+                  const SizedBox(height: 16),
+                  // Popüler Sanatçılar
+                  _buildPopularArtistsSection(),
+                ],
+              ),
             ),
           ),
         ],
@@ -64,52 +74,267 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryButton(String title) {
-    return ElevatedButton(
-      onPressed: () {
-        // Kategori butonuna tıklandığında yapılacak işlemler
-      },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: const Color(0xffF4F4FF),
-        backgroundColor: const Color(0xff6251DD),
-      ),
-      child: Text(title),
-    );
-  }
-
-  Widget _buildTrackCard(String title, String artist, String duration, String imagePath) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
+  Widget _buildTopTracksSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.asset(imagePath, width: 50, height: 50),
-            const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(artist),
-                Text(duration, style: const TextStyle(color: Colors.grey)),
-              ],
+            const Text(
+              'Top Tracks',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            TextButton(
+              child: const Text(
+                "View All",
+                style: TextStyle(color: Color(0xffEF6B4A)),
+              ),
+              onPressed: () {
+                NavigatorController.instance.pushToPage(
+                    NavigateRoutesItems.menu,
+                    arguments: controller.topTracks);
+              },
             ),
           ],
         ),
+        const SizedBox(height: 8),
+        SizedBox(
+          height: 150,
+          width: double.infinity,
+          child: ListView.builder(
+            padding: EdgeInsets.zero,
+            scrollDirection: Axis.horizontal,
+            itemCount: controller.topTracks.length,
+            itemBuilder: (context, index) => Padding(
+              padding: EdgeInsets.only(
+                  right: index == controller.topTracks.length - 1 ? 0 : 12),
+              child: _buildTrackCard(
+                controller.topTracks[index].title,
+                controller.topTracks[index].artist,
+                controller.topTracks[index].views,
+                controller.topTracks[index].image,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPopularArtistsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Popular Artists',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            TextButton(
+              child: const Text(
+                "View All",
+                style: TextStyle(color: Color(0xffEF6B4A)),
+              ),
+              onPressed: () {
+                NavigatorController.instance.pushToPage(
+                  NavigateRoutesItems.menu,
+                  arguments: controller.popularArtists,
+                );
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          height: 150,
+          width: double.infinity,
+          child: ListView.builder(
+            padding: EdgeInsets.zero,
+            scrollDirection: Axis.horizontal,
+            itemCount: controller.popularArtists.length,
+            itemBuilder: (context, index) => Padding(
+              padding: EdgeInsets.only(
+                  right:
+                      index == controller.popularArtists.length - 1 ? 0 : 12),
+              child: _buildArtistCard(
+                controller.popularArtists[index].name,
+                controller.popularArtists[index].image,
+                controller.popularArtists[index].views,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNewReleasesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'New Releases',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            TextButton(
+              child: const Text(
+                "View All",
+                style: TextStyle(color: Color(0xffEF6B4A)),
+              ),
+              onPressed: () {
+                NavigatorController.instance.pushToPage(
+                  NavigateRoutesItems.menu,
+                  arguments: controller.newReleases,
+                );
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          height: 150,
+          width: double.infinity,
+          child: ListView.builder(
+            padding: EdgeInsets.zero,
+            scrollDirection: Axis.horizontal,
+            itemCount: controller.newReleases.length,
+            itemBuilder: (context, index) => Padding(
+              padding: EdgeInsets.only(
+                  right: index == controller.newReleases.length - 1 ? 0 : 12),
+              child: _buildTrackCard(
+                controller.newReleases[index].title,
+                controller.newReleases[index].artist,
+                controller.newReleases[index].views,
+                controller.newReleases[index].image,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xffF4F4FF),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: TextField(
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: 'Search',
+          contentPadding: const EdgeInsets.only(top: 12),
+          hintStyle: TextStyle(color: Colors.grey[500]),
+          prefixIcon: const Icon(Icons.search, color: Colors.grey),
+          suffixIcon: const Icon(Icons.filter_list, color: Colors.grey),
+        ),
       ),
     );
   }
 
-  Widget _buildArtistCard(String name, String imagePath) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Image.asset(imagePath, width: 50, height: 50),
-            const SizedBox(width: 8),
-            Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-          ],
+  Widget _buildCategoryButton(String title) {
+    return Obx(() {
+      bool isSelected = controller.selectedCategory.value ==
+          title; // Seçili olup olmadığını kontrol et
+      return GestureDetector(
+        onTap: () {
+          controller.selectCategory(title); // Kategori seçildiğinde güncelle
+        },
+        child: Container(
+          margin: const EdgeInsets.only(right: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 32.0),
+          decoration: BoxDecoration(
+            color:
+                isSelected ? const Color(0xff6251DD) : const Color(0xffF4F4FF),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: isSelected
+                    ? Colors.white
+                    : const Color(0xff090937).withAlpha(128),
+              ),
+            ),
+          ),
         ),
+      );
+    });
+  }
+
+  Widget _buildTrackCard(
+      String title, String artist, String views, String imagePath) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: const Color(0xffF4F4FF),
+      ),
+      padding: const EdgeInsets.all(12),
+      child: Row(
+        children: [
+          Image.asset(
+            imagePath,
+            width: 90,
+            height: 150,
+            fit: BoxFit.cover,
+          ), // Resim boyutunu ayarlayın
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(title,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16)),
+              Text(artist, style: TextStyle(color: Colors.grey[700])),
+              const SizedBox(height: 32),
+              Text(views,
+                  style:
+                      const TextStyle(color: Color(0xff6251DD), fontSize: 16)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildArtistCard(String name, String imagePath, String totalView) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: const Color(0xffF4F4FF),
+      ),
+      padding: const EdgeInsets.all(12),
+      child: Row(
+        children: [
+          Image.asset(
+            imagePath,
+            width: 90,
+            height: 150,
+            fit: BoxFit.cover,
+          ), // Resim boyutunu ayarlayın
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(name,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16)),
+              const SizedBox(height: 8),
+              Text("Total views: $totalView",
+                  style: TextStyle(color: Colors.grey[700])),
+            ],
+          ),
+        ],
       ),
     );
   }
