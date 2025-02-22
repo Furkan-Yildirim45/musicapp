@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:main_app_structure/product/navigator/navigate_route_items.dart';
 import 'package:main_app_structure/product/navigator/navigator_controller.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_theme.dart';

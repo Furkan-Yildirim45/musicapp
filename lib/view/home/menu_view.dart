@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:main_app_structure/controllers/menu_view_controller.dart';
 import 'package:main_app_structure/models/artist_model.dart';
 import 'package:main_app_structure/models/track_model.dart';
+import 'package:main_app_structure/product/navigator/navigate_route_items.dart';
 import 'package:main_app_structure/product/navigator/navigator_controller.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_colors.dart';
 
@@ -82,41 +83,49 @@ class MenuView extends StatelessWidget {
       ),
       itemCount: tracks.length,
       itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-              color: const Color(0xffF4F4FF),
-              borderRadius: BorderRadius.circular(12)),
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Image.asset(
-                    tracks[index].image,
-                    fit: BoxFit.cover,
+        return InkWell(
+          onTap: () {
+            NavigatorController.instance.pushToPage(
+              NavigateRoutesItems.trackDetail,
+              arguments: tracks[index],
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: const Color(0xffF4F4FF),
+                borderRadius: BorderRadius.circular(12)),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Image.asset(
+                      tracks[index].image,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  tracks[index].title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                  const SizedBox(height: 8),
+                  Text(
+                    tracks[index].title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                Text(
-                  tracks[index].artist,
-                  style: TextStyle(color: Colors.grey[700]),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  tracks[index].views,
-                  style: const TextStyle(
-                    color: Color(0xff6251DD),
-                    fontSize: 14,
+                  Text(
+                    tracks[index].artist,
+                    style: TextStyle(color: Colors.grey[700]),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Text(
+                    tracks[index].views,
+                    style: const TextStyle(
+                      color: Color(0xff6251DD),
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -134,31 +143,39 @@ class MenuView extends StatelessWidget {
       ),
       itemCount: artists.length,
       itemBuilder: (context, index) {
-        return Card(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Image.asset(
-                    artists[index].image,
-                    fit: BoxFit.cover,
+        return InkWell(
+          onTap: () {
+            NavigatorController.instance.pushToPage(
+              NavigateRoutesItems.trackDetail,
+              arguments: artists[index],
+            );
+          },
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Image.asset(
+                      artists[index].image,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  artists[index].name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                  const SizedBox(height: 8),
+                  Text(
+                    artists[index].name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  "Total views: ${artists[index].views}",
-                  style: TextStyle(color: Colors.grey[700]),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Text(
+                    "Total views: ${artists[index].views}",
+                    style: TextStyle(color: Colors.grey[700]),
+                  ),
+                ],
+              ),
             ),
           ),
         );

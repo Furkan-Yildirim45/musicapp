@@ -4,6 +4,8 @@ import 'package:main_app_structure/controllers/home_view_controller.dart';
 import 'package:main_app_structure/product/navigator/navigate_route_items.dart';
 import 'package:main_app_structure/product/navigator/navigator_controller.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_colors.dart';
+import 'package:main_app_structure/models/track_model.dart';
+import 'package:main_app_structure/models/artist_model.dart';
 
 class HomeView extends StatelessWidget {
   final HomeViewController controller = Get.put(HomeViewController());
@@ -109,12 +111,7 @@ class HomeView extends StatelessWidget {
             itemBuilder: (context, index) => Padding(
               padding: EdgeInsets.only(
                   right: index == controller.topTracks.length - 1 ? 0 : 12),
-              child: _buildTrackCard(
-                controller.topTracks[index].title,
-                controller.topTracks[index].artist,
-                controller.topTracks[index].views,
-                controller.topTracks[index].image,
-              ),
+              child: _buildTrackCard(controller.topTracks[index]),
             ),
           ),
         ),
@@ -159,11 +156,7 @@ class HomeView extends StatelessWidget {
               padding: EdgeInsets.only(
                   right:
                       index == controller.popularArtists.length - 1 ? 0 : 12),
-              child: _buildArtistCard(
-                controller.popularArtists[index].name,
-                controller.popularArtists[index].image,
-                controller.popularArtists[index].views,
-              ),
+              child: _buildArtistCard(controller.popularArtists[index]),
             ),
           ),
         ),
@@ -207,12 +200,7 @@ class HomeView extends StatelessWidget {
             itemBuilder: (context, index) => Padding(
               padding: EdgeInsets.only(
                   right: index == controller.newReleases.length - 1 ? 0 : 12),
-              child: _buildTrackCard(
-                controller.newReleases[index].title,
-                controller.newReleases[index].artist,
-                controller.newReleases[index].views,
-                controller.newReleases[index].image,
-              ),
+              child: _buildTrackCard(controller.newReleases[index]),
             ),
           ),
         ),
@@ -270,71 +258,86 @@ class HomeView extends StatelessWidget {
     });
   }
 
-  Widget _buildTrackCard(
-      String title, String artist, String views, String imagePath) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: const Color(0xffF4F4FF),
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        children: [
-          Image.asset(
-            imagePath,
-            width: 90,
-            height: 150,
-            fit: BoxFit.cover,
-          ), // Resim boyutunu ayarlayın
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(title,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16)),
-              Text(artist, style: TextStyle(color: Colors.grey[700])),
-              const SizedBox(height: 32),
-              Text(views,
-                  style:
-                      const TextStyle(color: Color(0xff6251DD), fontSize: 16)),
-            ],
-          ),
-        ],
+  Widget _buildTrackCard(TrackModel track) {
+    return InkWell(
+      onTap: () {
+        NavigatorController.instance.pushToPage(
+          NavigateRoutesItems.trackDetail,
+          arguments: track,
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: const Color(0xffF4F4FF),
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Image.asset(
+              track.image,
+              width: 90,
+              height: 150,
+              fit: BoxFit.cover,
+            ), // Resim boyutunu ayarlayın
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(track.title,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16)),
+                Text(track.artist, style: TextStyle(color: Colors.grey[700])),
+                const SizedBox(height: 32),
+                Text(track.views,
+                    style: const TextStyle(
+                        color: Color(0xff6251DD), fontSize: 16)),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildArtistCard(String name, String imagePath, String totalView) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: const Color(0xffF4F4FF),
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        children: [
-          Image.asset(
-            imagePath,
-            width: 90,
-            height: 150,
-            fit: BoxFit.cover,
-          ), // Resim boyutunu ayarlayın
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(name,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16)),
-              const SizedBox(height: 8),
-              Text("Total views: $totalView",
-                  style: TextStyle(color: Colors.grey[700])),
-            ],
-          ),
-        ],
+  Widget _buildArtistCard(ArtistModel artist) {
+    return InkWell(
+      onTap: () {
+        NavigatorController.instance.pushToPage(
+          NavigateRoutesItems.trackDetail,
+          arguments: artist,
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: const Color(0xffF4F4FF),
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Image.asset(
+              artist.image,
+              width: 90,
+              height: 150,
+              fit: BoxFit.cover,
+            ), // Resim boyutunu ayarlayın
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(artist.name,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16)),
+                const SizedBox(height: 8),
+                Text("Total views: ${artist.views}",
+                    style: TextStyle(color: Colors.grey[700])),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

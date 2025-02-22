@@ -13,12 +13,18 @@ class HomeViewController extends GetxController {
       artist: 'The Weeknd',
       views: '11M listeners',
       image: 'assets/images/blinding_lights.png',
+      lyrics: 'I said, ooh, I\'m blinded by the lights...\nCan\'t sleep until I feel your touch...',
+      duration: '3:20', // Örnek süre
+      audioUrl: 'https://example.com/blinding_lights.mp3', // Örnek URL
     ),
     TrackModel(
       title: 'Shape of You',
       artist: 'Ed Sheeran',
       views: '10M listeners',
       image: 'assets/images/shape_of_you.png',
+      lyrics: 'I\'m in love with the shape of you...\nWe push and pull like a magnet do...',
+      duration: '3:53', // Örnek süre
+      audioUrl: 'https://example.com/shape_of_you.mp3', // Örnek URL
     ),
   ];
 
@@ -29,12 +35,18 @@ class HomeViewController extends GetxController {
       artist: 'Artist Name',
       views: '5M listeners',
       image: 'assets/images/charlie.png',
+      lyrics: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
+      duration: '4:00', // Örnek süre
+      audioUrl: 'https://example.com/new_album.mp3', // Örnek URL
     ),
     TrackModel(
       title: 'Latest Hits',
       artist: 'Another Artist',
       views: '3M listeners',
       image: 'assets/images/hits.png',
+      lyrics: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
+      duration: '3:45', // Örnek süre
+      audioUrl: 'https://example.com/latest_hits.mp3', // Örnek URL
     ),
   ];
 

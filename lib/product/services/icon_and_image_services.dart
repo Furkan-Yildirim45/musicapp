@@ -26,10 +26,7 @@ class AppIconUtility {
       case IconFormat.png:
         extension = 'png';
         break;
-      // Diğer formatlar eklenebilir, ancak genelde ikonlar PNG formatını destekler
-      default:
-        extension = 'png';
-    }
+      }
     return 'assets/icons/$imageName.$extension';
   }
 }
