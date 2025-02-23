@@ -96,23 +96,24 @@ class TrackDetailView extends StatelessWidget {
             return Column(
               children: [
                 Slider(
-                  value: controller.isPlaying.value ? 0.5 : 0.0, // Örnek değer
+                  value: controller.currentPosition.value,
                   min: 0,
-                  max: 1,
+                  max: controller.duration.value,
                   onChanged: (value) {
-                    // İlerleme çubuğu değiştiğinde yapılacak işlemler
+                    controller.seekTo(value); // İlerleme çubuğu değiştiğinde pozisyonu ayarla
                   },
                 ),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("0:00"),
-                    Text("2:23"), // Örnek toplam süre
+                    Text(controller.formatDuration(controller.currentPosition.value)), // Mevcut süre
+                    Text(controller.formatDuration(controller.duration.value)), // Toplam süre
                   ],
                 ),
               ],
             );
           }),
+          const SizedBox(height: 60),
         ],
       ),
       floatingActionButton: Obx(() {
