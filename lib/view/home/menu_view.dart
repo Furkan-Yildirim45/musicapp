@@ -6,8 +6,10 @@ import 'package:main_app_structure/models/track_model.dart';
 import 'package:main_app_structure/product/navigator/navigate_route_items.dart';
 import 'package:main_app_structure/product/navigator/navigator_controller.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_colors.dart';
+import 'package:main_app_structure/product/utils/app_utils/app_general.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_padding.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_radius.dart';
+import 'package:main_app_structure/product/utils/app_utils/app_spaces..dart';
 
 class MenuView extends StatelessWidget {
   final MenuViewController controller = Get.put(MenuViewController());
@@ -17,42 +19,49 @@ class MenuView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: IconButton(
-            onPressed: () {
-              NavigatorController.instance.pop();
-            },
-            icon: const Icon(Icons.arrow_back_ios)),
-        backgroundColor: AppColor.white.getColor(),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Text(
-              controller.menuTitle.value,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
-      ),
+      appBar: _buildAppBar(context),
       body: Obx(() {
         return Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: AppPadding.instance.horizontalMedium,
           child: Column(
             children: [
               _buildSearchBar(),
-              const SizedBox(height: 16),
-              Expanded(
-                child: controller.filteredTracks.isNotEmpty
-                    ? _buildTrackGrid(controller.filteredTracks)
-                    : controller.filteredArtists.isNotEmpty
-                        ? _buildArtistGrid(controller.filteredArtists)
-                        : const Center(child: Text("No data available")),
-              ),
+              AppSpaces.instance.vertical15,
+              _buildGridViewBuilder(),
             ],
           ),
         );
       }),
+    );
+  }
+
+  Expanded _buildGridViewBuilder() {
+    return Expanded(
+      child: controller.filteredTracks.isNotEmpty
+          ? _buildTrackGrid(controller.filteredTracks)
+          : controller.filteredArtists.isNotEmpty
+              ? _buildArtistGrid(controller.filteredArtists)
+              : const Center(child: Text("No data available")),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      title: IconButton(
+          onPressed: () {
+            NavigatorController.instance.pop();
+          },
+          icon: const Icon(Icons.arrow_back_ios)),
+      backgroundColor: AppColor.white.getColor(),
+      actions: [
+        Padding(
+          padding: AppPadding.instance.rightMedium,
+          child: Text(controller.menuTitle.value,
+              style: context.appGeneral.textTheme.headlineMedium
+                  ?.copyWith(fontWeight: FontWeight.bold)),
+        )
+      ],
     );
   }
 
@@ -98,10 +107,10 @@ class MenuView extends StatelessWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-                color: const Color(0xffF4F4FF),
-                borderRadius: BorderRadius.circular(12)),
+                color: AppColor.maWhite.getColor(),
+                borderRadius: AppRadius.instance.normalBorderRadius),
             child: Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: AppPadding.instance.allNormal,
               child: Column(
                 children: [
                   Expanded(
@@ -110,26 +119,18 @@ class MenuView extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    tracks[index].title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
+                  AppSpaces.instance.vertical10,
+                  Text(tracks[index].title,
+                      style: context.appGeneral.textTheme.titleMedium
+                          ?.copyWith(fontWeight: FontWeight.w500)),
                   Text(
                     tracks[index].artist,
                     style: TextStyle(color: Colors.grey[700]),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    tracks[index].views,
-                    style: const TextStyle(
-                      color: Color(0xff6251DD),
-                      fontSize: 14,
-                    ),
-                  ),
+                  AppSpaces.instance.vertical10,
+                  Text(tracks[index].views,
+                      style: context.appGeneral.textTheme.titleSmall
+                          ?.copyWith(color: AppColor.majorelleBlue.getColor())),
                 ],
               ),
             ),
@@ -158,7 +159,7 @@ class MenuView extends StatelessWidget {
           },
           child: Card(
             child: Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: AppPadding.instance.allNormal,
               child: Column(
                 children: [
                   Expanded(
@@ -167,19 +168,14 @@ class MenuView extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    artists[index].name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Total views: ${artists[index].views}",
-                    style: TextStyle(color: Colors.grey[700]),
-                  ),
+                  AppSpaces.instance.vertical10,
+                  Text(artists[index].name,
+                      style: context.appGeneral.textTheme.titleMedium
+                          ?.copyWith(fontWeight: FontWeight.w500)),
+                  AppSpaces.instance.vertical10,
+                  Text("Total views: ${artists[index].views}",
+                      style: context.appGeneral.textTheme.titleSmall
+                          ?.copyWith(color: AppColor.majorelleBlue.getColor())),
                 ],
               ),
             ),

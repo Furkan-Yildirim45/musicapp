@@ -5,6 +5,10 @@ import 'package:main_app_structure/models/track_model.dart';
 import 'package:main_app_structure/product/navigator/navigate_route_items.dart';
 import 'package:main_app_structure/product/navigator/navigator_controller.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_colors.dart';
+import 'package:main_app_structure/product/utils/app_utils/app_general.dart';
+import 'package:main_app_structure/product/utils/app_utils/app_padding.dart';
+import 'package:main_app_structure/product/utils/app_utils/app_radius.dart';
+import 'package:main_app_structure/product/utils/app_utils/app_spaces..dart';
 
 class ArtistDetailView extends StatelessWidget {
   final ArtistDetailViewController controller =
@@ -15,123 +19,133 @@ class ArtistDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: IconButton(
-            onPressed: () {
-              NavigatorController.instance.pop();
-            },
-            icon: const Icon(Icons.arrow_back_ios)),
-        backgroundColor: AppColor.white.getColor(),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Text(
-              controller.artist.name,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
-      ),
+      appBar: _buildAppBar(context),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: AppPadding.instance.horizontalMedium,
         child: ListView(
           children: [
             // Sanatçı Resmi
-            Image.network(
-              controller.artist.image,
-              height: 250,
-              width: double.infinity,
-            ),
-            const SizedBox(height: 16),
+            _buildArtistImage(),
+            AppSpaces.instance.vertical15,
             // Sanatçı Adı
             Text(controller.artist.name,
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
+                style: context.appGeneral.textTheme.headlineMedium
+                    ?.copyWith(fontWeight: FontWeight.bold)),
+            AppSpaces.instance.vertical10,
             // Toplam Görüntüleme
             Text("Total views: ${controller.artist.views}",
                 style: TextStyle(color: Colors.grey[700])),
-            const SizedBox(height: 16),
+            AppSpaces.instance.vertical15,
             // Şarkı Listesi Başlığı
-            const Text("Tracks",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
+            Text("Tracks",
+                style: context.appGeneral.textTheme.titleLarge
+                    ?.copyWith(fontWeight: FontWeight.bold)),
+            AppSpaces.instance.vertical10,
             // Şarkı Listesi
 
-            SizedBox(
-              height: controller.artist.tracks.length * 150 +
-                  (controller.artist.tracks.length - 1) * 10,
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount:
-                    controller.artist.tracks.length, // Sanatçının şarkı sayısı
-                itemBuilder: (context, index) {
-                  TrackModel track = controller.artist.tracks[index];
-                  return InkWell(
-                    onTap: () {
-                      NavigatorController.instance.pushToPage(
-                        NavigateRoutesItems.trackDetail,
-                        arguments: track,
-                      );
-                    },
-                    child: Container(
-                      height: 150,
-                      margin: EdgeInsets.only(bottom: index == 3 ? 0 : 10),
-                      decoration: BoxDecoration(
-                          color: const Color(0xffF4F4FF),
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Image.network(
-                                track.image,
-                                height: 150,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Expanded(
-                              flex: 2,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    track.title,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  Text(
-                                    track.artist,
-                                    style: TextStyle(color: Colors.grey[700]),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    track.views,
-                                    style: const TextStyle(
-                                      color: Color(0xff6251DD),
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            _buildPageListView(),
           ],
         ),
       ),
+    );
+  }
+
+  SizedBox _buildPageListView() {
+    return SizedBox(
+      height: controller.artist.tracks.length * Get.height * 0.22 +
+          (controller.artist.tracks.length - 1) * 10,
+      child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: controller.artist.tracks.length, // Sanatçının şarkı sayısı
+        itemBuilder: (context, index) {
+          TrackModel track = controller.artist.tracks[index];
+          return _buildListViewCard(track, index, context);
+        },
+      ),
+    );
+  }
+
+  InkWell _buildListViewCard(
+      TrackModel track, int index, BuildContext context) {
+    return InkWell(
+      onTap: () {
+        NavigatorController.instance.pushToPage(
+          NavigateRoutesItems.trackDetail,
+          arguments: track,
+        );
+      },
+      child: Container(
+        height: Get.height * 0.22,
+        margin: EdgeInsets.only(bottom: index == 3 ? 0 : 10),
+        decoration: BoxDecoration(
+            color: AppColor.maWhite.getColor(),
+            borderRadius: AppRadius.instance.normalBorderRadius),
+        child: Padding(
+          padding: AppPadding.instance.allNormal,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Image.network(
+                  track.image,
+                  height: Get.height * 0.22,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              AppSpaces.instance.vertical10,
+              Expanded(
+                flex: 2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(track.title,
+                        style: context.appGeneral.textTheme.titleMedium),
+                    Text(
+                      track.artist,
+                      style: TextStyle(color: Colors.grey[700]),
+                    ),
+                    AppSpaces.instance.vertical10,
+                    Text(
+                      track.views,
+                      style: context.appGeneral.textTheme.bodyLarge?.copyWith(
+                          color: AppColor.majorelleBlue.getColor(),
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Image _buildArtistImage() {
+    return Image.network(
+      controller.artist.image,
+      height: Get.height * 0.36,
+      width: double.infinity,
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      title: IconButton(
+          onPressed: () {
+            NavigatorController.instance.pop();
+          },
+          icon: const Icon(Icons.arrow_back_ios)),
+      backgroundColor: AppColor.white.getColor(),
+      actions: [
+        Padding(
+          padding: AppPadding.instance.rightMedium,
+          child: Text(controller.artist.name,
+              style: context.appGeneral.textTheme.headlineMedium
+                  ?.copyWith(fontWeight: FontWeight.bold)),
+        )
+      ],
     );
   }
 }
