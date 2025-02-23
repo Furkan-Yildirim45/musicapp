@@ -99,7 +99,7 @@ class MenuView extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
-                    child: Image.asset(
+                    child: Image.network(
                       tracks[index].image,
                       fit: BoxFit.cover,
                     ),
@@ -156,7 +156,7 @@ class MenuView extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
-                    child: Image.asset(
+                    child: Image.network(
                       artists[index].image,
                       fit: BoxFit.cover,
                     ),

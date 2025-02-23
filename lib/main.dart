@@ -4,10 +4,11 @@ import 'package:main_app_structure/product/navigator/navigate_route_items.dart';
 import 'package:main_app_structure/product/navigator/navigator_controller.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart'; // Firebase ayar dosyanız
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // await dotenv.load(fileName: ".env");
   runApp(Main());
 }

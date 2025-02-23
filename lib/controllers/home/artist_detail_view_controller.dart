@@ -8,5 +8,7 @@ class ArtistDetailViewController extends GetxController {
   void onInit() {
     super.onInit();
     artist = Get.arguments; // ArtistModel'i al
+    print("artist.tracks.length : ${artist.tracks.length}");
+    print("artist.tracks : ${artist.tracks}");
   }
 } 

@@ -104,16 +104,18 @@ class HomeView extends StatelessWidget {
         SizedBox(
           height: 150,
           width: double.infinity,
-          child: ListView.builder(
-            padding: EdgeInsets.zero,
-            scrollDirection: Axis.horizontal,
-            itemCount: controller.topTracks.length,
-            itemBuilder: (context, index) => Padding(
-              padding: EdgeInsets.only(
-                  right: index == controller.topTracks.length - 1 ? 0 : 12),
-              child: _buildTrackCard(controller.topTracks[index]),
-            ),
-          ),
+          child: Obx(() {
+            return ListView.builder(
+              padding: EdgeInsets.zero,
+              scrollDirection: Axis.horizontal,
+              itemCount: controller.topTracks.length,
+              itemBuilder: (context, index) => Padding(
+                padding: EdgeInsets.only(
+                    right: index == controller.topTracks.length - 1 ? 0 : 12),
+                child: _buildTrackCard(controller.topTracks[index]),
+              ),
+            );
+          }),
         ),
       ],
     );
@@ -138,7 +140,7 @@ class HomeView extends StatelessWidget {
               onPressed: () {
                 NavigatorController.instance.pushToPage(
                   NavigateRoutesItems.menu,
-                  arguments: controller.popularArtists,
+                  arguments: controller.artists,
                 );
               },
             ),
@@ -148,17 +150,18 @@ class HomeView extends StatelessWidget {
         SizedBox(
           height: 150,
           width: double.infinity,
-          child: ListView.builder(
-            padding: EdgeInsets.zero,
-            scrollDirection: Axis.horizontal,
-            itemCount: controller.popularArtists.length,
-            itemBuilder: (context, index) => Padding(
-              padding: EdgeInsets.only(
-                  right:
-                      index == controller.popularArtists.length - 1 ? 0 : 12),
-              child: _buildArtistCard(controller.popularArtists[index]),
-            ),
-          ),
+          child: Obx(() {
+            return ListView.builder(
+              padding: EdgeInsets.zero,
+              scrollDirection: Axis.horizontal,
+              itemCount: controller.artists.length,
+              itemBuilder: (context, index) => Padding(
+                padding: EdgeInsets.only(
+                    right: index == controller.artists.length - 1 ? 0 : 12),
+                child: _buildArtistCard(controller.artists[index]),
+              ),
+            );
+          }),
         ),
       ],
     );
@@ -193,16 +196,18 @@ class HomeView extends StatelessWidget {
         SizedBox(
           height: 150,
           width: double.infinity,
-          child: ListView.builder(
-            padding: EdgeInsets.zero,
-            scrollDirection: Axis.horizontal,
-            itemCount: controller.newReleases.length,
-            itemBuilder: (context, index) => Padding(
-              padding: EdgeInsets.only(
-                  right: index == controller.newReleases.length - 1 ? 0 : 12),
-              child: _buildTrackCard(controller.newReleases[index]),
-            ),
-          ),
+          child: Obx(() {
+            return ListView.builder(
+              padding: EdgeInsets.zero,
+              scrollDirection: Axis.horizontal,
+              itemCount: controller.newReleases.length,
+              itemBuilder: (context, index) => Padding(
+                padding: EdgeInsets.only(
+                    right: index == controller.newReleases.length - 1 ? 0 : 12),
+                child: _buildTrackCard(controller.newReleases[index]),
+              ),
+            );
+          }),
         ),
       ],
     );
@@ -274,12 +279,12 @@ class HomeView extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Row(
           children: [
-            Image.asset(
+            Image.network(
               track.image,
               width: 90,
               height: 150,
               fit: BoxFit.cover,
-            ), // Resim boyutunu ayarlayın
+            ),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -317,7 +322,7 @@ class HomeView extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Row(
           children: [
-            Image.asset(
+            Image.network(
               artist.image,
               width: 90,
               height: 150,
@@ -342,3 +347,6 @@ class HomeView extends StatelessWidget {
     );
   }
 }
+
+// https://raw.githubusercontent.com/Furkan-Yildirim45/musicapp-datas/master/images/someone_like_you.png
+// https://raw.githubusercontent.com/Furkan-Yildirim45/musicapp-datas/master/Someone-Like-You-Adele-_Lyrics_-_.mp3

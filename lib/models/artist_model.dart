@@ -10,6 +10,15 @@ class ArtistModel {
     required this.name,
     required this.image,
     required this.views,
-    required this.tracks, // Şarkı listesi
+    required this.tracks,
   });
+
+  factory ArtistModel.fromMap(Map<String, dynamic> data) {
+    return ArtistModel(
+      name: data['name'],
+      image: data['image'],
+      views: data['views'],
+      tracks: List<TrackModel>.from(data['tracks'].map((track) => TrackModel.fromMap(track))),
+    );
+  }
 } 

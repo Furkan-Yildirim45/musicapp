@@ -1,9 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:main_app_structure/models/artist_model.dart';
+import 'package:main_app_structure/models/track_model.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Dio _dio = Dio();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Kullanıcıyı giriş yapma
   Future<User?> login(String email, String password) async {
@@ -80,5 +84,48 @@ class AuthService {
   // Kullanıcıyı çıkış yapma
   Future<void> logout() async {
     await _auth.signOut();
+  }
+
+  // Sanatçılar ve şarkılar için verileri çekme
+  Future<List<ArtistModel>> fetchArtists() async {
+    try {
+      QuerySnapshot artistSnapshot = await _firestore.collection('artists').get();
+      
+      if (artistSnapshot.docs.isEmpty) {
+        print("Sanatçı koleksiyonu boş!");
+        return [];
+      }
+
+      return artistSnapshot.docs.map((doc) {
+        return ArtistModel.fromMap(doc.data() as Map<String, dynamic>);
+      }).toList();
+    } catch (e) {
+      print("Sanatçı verilerini çekme hatası: $e");
+      return [];
+    }
+  }
+
+  Future<List<TrackModel>> fetchNewReleases() async {
+    try {
+      QuerySnapshot newReleasesSnapshot = await _firestore.collection('newReleases').get();
+      return newReleasesSnapshot.docs.map((doc) {
+        return TrackModel.fromMap(doc.data() as Map<String, dynamic>);
+      }).toList();
+    } catch (e) {
+      print("Yeni sürüm verilerini çekme hatası: $e");
+      return [];
+    }
+  }
+
+  Future<List<TrackModel>> fetchTopTracks() async {
+    try {
+      QuerySnapshot topTracksSnapshot = await _firestore.collection('topTracks').get();
+      return topTracksSnapshot.docs.map((doc) {
+        return TrackModel.fromMap(doc.data() as Map<String, dynamic>);
+      }).toList();
+    } catch (e) {
+      print("En iyi şarkı verilerini çekme hatası: $e");
+      return [];
+    }
   }
 } 

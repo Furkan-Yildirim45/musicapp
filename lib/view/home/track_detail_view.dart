@@ -43,7 +43,7 @@ class TrackDetailView extends StatelessWidget {
               Column(
                 children: [
                   // Image
-                  Image.asset(
+                  Image.network(
                     controller.track.image,
                     fit: BoxFit.cover,
                     height: 250,

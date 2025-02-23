@@ -38,7 +38,11 @@ class ArtistDetailView extends StatelessWidget {
         child: ListView(
           children: [
             // Sanatçı Resmi
-            Image.asset(controller.artist.image),
+            Image.network(
+              controller.artist.image,
+              height: 250,
+              width: double.infinity,
+            ),
             const SizedBox(height: 16),
             // Sanatçı Adı
             Text(controller.artist.name,
@@ -54,6 +58,7 @@ class ArtistDetailView extends StatelessWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             // Şarkı Listesi
+
             SizedBox(
               height: controller.artist.tracks.length * 150 +
                   (controller.artist.tracks.length - 1) * 10,
@@ -62,8 +67,7 @@ class ArtistDetailView extends StatelessWidget {
                 itemCount:
                     controller.artist.tracks.length, // Sanatçının şarkı sayısı
                 itemBuilder: (context, index) {
-                  TrackModel track =
-                      controller.artist.tracks[index]; // Şarkı modelini al
+                  TrackModel track = controller.artist.tracks[index];
                   return InkWell(
                     onTap: () {
                       NavigatorController.instance.pushToPage(
@@ -83,7 +87,7 @@ class ArtistDetailView extends StatelessWidget {
                           children: [
                             Expanded(
                               flex: 1,
-                              child: Image.asset(
+                              child: Image.network(
                                 track.image,
                                 height: 150,
                                 fit: BoxFit.cover,
