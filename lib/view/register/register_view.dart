@@ -32,6 +32,7 @@ class RegisterView extends StatelessWidget {
               AppSpaces.instance.vertical50,
               // Başlık
               _buildWelcomeText(context),
+              _buildRegisterToYourAccountText(context),
               AppSpaces.instance.vertical30,
               // İsim alanı
               _buildNameTextFieldTopText(context),
@@ -67,21 +68,19 @@ class RegisterView extends StatelessWidget {
 
   Row _buildLoginPageTo() {
     return Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    NavigatorController.instance
-                        .pushToPage(NavigateRoutesItems.login);
-                  },
-                  child: Text(
-                    'Login',
-                    style:
-                        TextStyle(color: AppColor.majorelleBlue.getColor()),
-                  ),
-                ),
-              ],
-            );
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          onPressed: () {
+            NavigatorController.instance.pushToPage(NavigateRoutesItems.login);
+          },
+          child: Text(
+            'Login',
+            style: TextStyle(color: AppColor.majorelleBlue.getColor()),
+          ),
+        ),
+      ],
+    );
   }
 
   SizedBox _buildPageLogo() {
@@ -141,6 +140,14 @@ class RegisterView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Text _buildRegisterToYourAccountText(BuildContext context) {
+    return Text(
+      'Register an account',
+      style: context.appGeneral.textTheme.headlineMedium?.copyWith(
+          color: AppColor.black.getColor(), fontWeight: FontWeight.bold),
     );
   }
 }

@@ -42,7 +42,6 @@ class ArtistDetailView extends StatelessWidget {
                     ?.copyWith(fontWeight: FontWeight.bold)),
             AppSpaces.instance.vertical10,
             // Şarkı Listesi
-
             _buildPageListView(),
           ],
         ),
@@ -120,6 +119,7 @@ class ArtistDetailView extends StatelessWidget {
       ),
     );
   }
+
 
   Image _buildArtistImage() {
     return Image.network(
