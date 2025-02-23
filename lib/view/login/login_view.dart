@@ -5,145 +5,148 @@ import 'package:main_app_structure/product/navigator/navigate_route_items.dart';
 import 'package:main_app_structure/product/navigator/navigator_controller.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_colors.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_general.dart';
+import 'package:main_app_structure/product/utils/app_utils/app_padding.dart';
+import 'package:main_app_structure/product/utils/app_utils/app_spaces..dart';
+import 'package:main_app_structure/product/widgets/general/app_text_field.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
 
   final LoginController controller = Get.put(LoginController());
-    final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Arka plan rengi
+      backgroundColor: AppColor.white.getColor(), // Arka plan rengi
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: AppPadding.instance.horizontalMedium,
           child: ListView(
             children: [
-              const SizedBox(
-                height: 50,
-              ),
+              AppSpaces.instance.vertical40,
               //logo
-              Image.asset(
-                "assets/images/logo.png",
-                width: 64,
-                height: 64,
-              ),
+              _buildPageLogo(),
               // Başlık
-              const SizedBox(
-                height: 70,
-              ),
-              const Text(
-                'Welcome back!',
-                style: TextStyle(fontSize: 16, color: Colors.black54),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Login to your account',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 32),
+              AppSpaces.instance.vertical50,
+              _buildWelcomeBackText(context),
+              _buildLoginToYourAccountText(context),
+              AppSpaces.instance.vertical30,
               // E-posta alanı
-              const Text(
-                'E-mail',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              _buildEMailTextFieldTopText(context),
+              AppTextField(
+                emailController: _emailController,
+                hintText: "john@gmail.com",
               ),
-              Container(
-                color: const Color(0xffF4F4FF),
-                child: TextField(
-                  controller: _emailController,
-                  cursorColor: Colors.black,
-                  decoration: InputDecoration(
-                    hintText: "john@mail.com",
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.only(left: 16),
-                    hintStyle: context.appGeneral.textTheme.labelLarge
-                        ?.copyWith(color: AppColor.grey.getColor()),
-                    errorStyle: const TextStyle(height: 0),
-                    counterText: '',
-                    counterStyle: const TextStyle(height: 0),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  maxLines: 1,
-                ),
-              ),
-              const SizedBox(height: 16),
+              AppSpaces.instance.vertical15,
               // Şifre alanı
-              const Text(
-                'Password',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              _buildPasswordTextFieldTopText(context),
+              AppTextField(
+                emailController: _passwordController,
+                hintText: "********",
               ),
-              Container(
-                color: const Color(0xffF4F4FF),
-                child: TextField(
-                  controller: _passwordController,
-                  cursorColor: Colors.black,
-                  decoration: InputDecoration(
-                    hintText: "********",
-                    contentPadding: const EdgeInsets.only(left: 16),
-                    border: InputBorder.none,
-                    hintStyle: context.appGeneral.textTheme.labelLarge
-                        ?.copyWith(color: AppColor.grey.getColor()),
-                    errorStyle: const TextStyle(height: 0),
-                    counterText: '',
-                    counterStyle: const TextStyle(height: 0),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  maxLines: 1,
-                ),
-              ),
-              const SizedBox(height: 16),
+              AppSpaces.instance.vertical15,
               // Remember Me ve Register
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Checkbox(value: false, onChanged: (value) {}),
-                      const Text(
-                        'Remember Me',
-                        style: TextStyle(color: Color(0xff6251DD)),
-                      ),
-                    ],
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      NavigatorController.instance.pushToPage(NavigateRoutesItems.register);
-                    },
-                    child: const Text(
-                      'Register',
-                      style: TextStyle(color: Color(0xff6251DD)),
-                    ),
-                  ),
-                ],
-              ),
+              _buildRememberMeAndRegisterPageTo(),
               // Login butonu
             ],
           ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: SizedBox(
-          height: 48,
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () {
-              controller.login(_emailController.text, _passwordController.text);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xffEF6B4A),
-            ),
-            child: const Text(
-              'Login',
-              style: TextStyle(color: Colors.white),
-            ),
+      floatingActionButton: _buildPageFloatActionButton(context),
+    );
+  }
+
+  Padding _buildPageFloatActionButton(BuildContext context) {
+    return Padding(
+      padding: AppPadding.instance.horizontalMedium,
+      child: SizedBox(
+        height: 48,
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () {
+            controller.login(_emailController.text, _passwordController.text);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColor.entanRed.getColor(),
+          ),
+          child: Text(
+            'Login',
+            style: context.appGeneral.textTheme.titleMedium
+                ?.copyWith(color: AppColor.white.getColor()),
           ),
         ),
       ),
     );
   }
+
+  Row _buildRememberMeAndRegisterPageTo() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Checkbox(value: false, onChanged: (value) {}),
+            Text(
+              'Remember Me',
+              style: TextStyle(color: AppColor.majorelleBlue.getColor()),
+            ),
+          ],
+        ),
+        TextButton(
+          onPressed: () {
+            NavigatorController.instance
+                .pushToPage(NavigateRoutesItems.register);
+          },
+          child: Text(
+            'Register',
+            style: TextStyle(color: AppColor.majorelleBlue.getColor()),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Text _buildPasswordTextFieldTopText(BuildContext context) {
+    return Text(
+      'Password',
+      style: context.appGeneral.textTheme.bodyLarge
+          ?.copyWith(color: AppColor.black.getColor()),
+    );
+  }
+
+  Text _buildEMailTextFieldTopText(BuildContext context) {
+    return Text(
+      'E-mail',
+      style: context.appGeneral.textTheme.bodyLarge
+          ?.copyWith(color: AppColor.black.getColor()),
+    );
+  }
+
+  Text _buildLoginToYourAccountText(BuildContext context) {
+    return Text(
+      'Login to your account',
+      style: context.appGeneral.textTheme.headlineMedium?.copyWith(
+          color: AppColor.black.getColor(), fontWeight: FontWeight.bold),
+    );
+  }
+
+  Text _buildWelcomeBackText(BuildContext context) {
+    return Text(
+      'Welcome back!',
+      style: context.appGeneral.textTheme.bodyLarge
+          ?.copyWith(color: AppColor.black54.getColor()),
+    );
+  }
+
+  Image _buildPageLogo() {
+    return Image.asset(
+      "assets/images/logo.png",
+      width: Get.height * 0.1,
+      height: Get.height * 0.1,
+    );
+  }
 }
+

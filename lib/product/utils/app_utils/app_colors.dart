@@ -8,11 +8,16 @@ enum AppColor {
   yellow,
   grey,
   black12,
+  black54,
   white10,
   transparent,
   scaffoldBackgorundColor,
   iconBackgroundColor,
   softBackgroundColor,
+  indigo900,
+  entanRed,
+  maWhite,
+  majorelleBlue,
 }
 
 extension AppColorExtension on AppColor {
@@ -42,6 +47,16 @@ extension AppColorExtension on AppColor {
         return const Color(0xffFFFFFF);
       case AppColor.yellow:
         return const Color(0xffFFFF00);
+      case AppColor.indigo900:
+        return Colors.indigo[900]!;
+      case AppColor.entanRed:
+        return const Color(0xffEF6B4A);
+      case AppColor.black54:
+        return Colors.black54;
+      case AppColor.maWhite:
+        return const Color(0xffF4F4FF);
+      case AppColor.majorelleBlue:
+        return const Color(0xff6251DD);
     }
   }
 }

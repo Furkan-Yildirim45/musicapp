@@ -6,6 +6,8 @@ import 'package:main_app_structure/models/track_model.dart';
 import 'package:main_app_structure/product/navigator/navigate_route_items.dart';
 import 'package:main_app_structure/product/navigator/navigator_controller.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_colors.dart';
+import 'package:main_app_structure/product/utils/app_utils/app_padding.dart';
+import 'package:main_app_structure/product/utils/app_utils/app_radius.dart';
 
 class MenuView extends StatelessWidget {
   final MenuViewController controller = Get.put(MenuViewController());
@@ -41,10 +43,10 @@ class MenuView extends StatelessWidget {
               _buildSearchBar(),
               const SizedBox(height: 16),
               Expanded(
-                child: controller.tracks.isNotEmpty
-                    ? _buildTrackGrid(controller.tracks)
-                    : controller.artists.isNotEmpty
-                        ? _buildArtistGrid(controller.artists)
+                child: controller.filteredTracks.isNotEmpty
+                    ? _buildTrackGrid(controller.filteredTracks)
+                    : controller.filteredArtists.isNotEmpty
+                        ? _buildArtistGrid(controller.filteredArtists)
                         : const Center(child: Text("No data available")),
               ),
             ],
@@ -57,17 +59,21 @@ class MenuView extends StatelessWidget {
   Widget _buildSearchBar() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xffF4F4FF),
-        borderRadius: BorderRadius.circular(12),
+        color: AppColor.maWhite.getColor(),
+        borderRadius: AppRadius.instance.normalBorderRadius,
       ),
       child: TextField(
+        controller: controller.searchController,
+        onChanged: (value) {
+          controller.filterTracks(value); // Filtreleme işlemi
+        },
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: 'Search',
-          contentPadding: const EdgeInsets.only(top: 12),
+          contentPadding: AppPadding.instance.topNormal,
           hintStyle: TextStyle(color: Colors.grey[500]),
-          prefixIcon: const Icon(Icons.search, color: Colors.grey),
-          suffixIcon: const Icon(Icons.filter_list, color: Colors.grey),
+          prefixIcon: Icon(Icons.search, color: AppColor.grey.getColor()),
+          suffixIcon: Icon(Icons.filter_list, color: AppColor.grey.getColor()),
         ),
       ),
     );
@@ -146,7 +152,7 @@ class MenuView extends StatelessWidget {
         return InkWell(
           onTap: () {
             NavigatorController.instance.pushToPage(
-              NavigateRoutesItems.trackDetail,
+              NavigateRoutesItems.artistDetail,
               arguments: artists[index],
             );
           },

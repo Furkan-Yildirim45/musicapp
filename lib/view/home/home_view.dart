@@ -3,94 +3,127 @@ import 'package:get/get.dart';
 import 'package:main_app_structure/controllers/home/home_view_controller.dart';
 import 'package:main_app_structure/product/navigator/navigate_route_items.dart';
 import 'package:main_app_structure/product/navigator/navigator_controller.dart';
+import 'package:main_app_structure/product/services/icon_and_image_services.dart';
 import 'package:main_app_structure/product/utils/app_utils/app_colors.dart';
 import 'package:main_app_structure/models/track_model.dart';
 import 'package:main_app_structure/models/artist_model.dart';
+import 'package:main_app_structure/product/utils/app_utils/app_general.dart';
+import 'package:main_app_structure/product/utils/app_utils/app_padding.dart';
+import 'package:main_app_structure/product/utils/app_utils/app_radius.dart';
+import 'package:main_app_structure/product/utils/app_utils/app_spaces..dart';
 
 class HomeView extends StatelessWidget {
   final HomeViewController controller = Get.put(HomeViewController());
+  final TextEditingController _searchController = TextEditingController();
 
   HomeView({super.key}); // Controller'ı oluştur
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Image.asset(
-          "assets/images/logo.png",
-          width: 56,
-          height: 56,
+      appBar: _buildAppBar(context),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return _buidCircularProgressIndicator();
+        } else {
+          return _buildBody(context);
+        }
+      }),
+    );
+  }
+
+  Column _buildBody(BuildContext context) {
+    return Column(
+      children: [
+        Divider(
+          color: Colors.grey[300],
         ),
-        backgroundColor: AppColor.white.getColor(), // Spotify yeşili
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Text(
-              "Catalog",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
-      ),
-      body: Column(
-        children: [
-          Divider(
-            color: Colors.grey[300],
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ListView(
-                children: [
-                  // Kategoriler
-                  SizedBox(
-                    height: 50, // Yüksekliği ayarlayın
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: controller.categories.length,
-                      itemBuilder: (context, index) {
-                        return _buildCategoryButton(
-                            controller.categories[index]);
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Arama Çubuğu
-                  _buildSearchBar(),
-                  const SizedBox(height: 16),
-                  // En Çok Dinlenenler
-                  _buildTopTracksSection(),
-                  const SizedBox(height: 16),
-                  // Yeni Çıkanlar
-                  _buildNewReleasesSection(),
-                  const SizedBox(height: 16),
-                  // Popüler Sanatçılar
-                  _buildPopularArtistsSection(),
-                ],
-              ),
+        Expanded(
+          child: Padding(
+            padding: AppPadding.instance.allMedium,
+            child: ListView(
+              children: [
+                // Kategoriler
+                _buildPageCategories(),
+                AppSpaces.instance.vertical15,
+                // Arama Çubuğu
+                _buildSearchBar(),
+                AppSpaces.instance.vertical15,
+                // En Çok Dinlenenler
+                _buildTopTracksSection(context),
+                AppSpaces.instance.vertical15,
+                // Yeni Çıkanlar
+                _buildNewReleasesSection(context),
+                AppSpaces.instance.vertical15,
+                // Popüler Sanatçılar
+                _buildPopularArtistsSection(context),
+              ],
             ),
           ),
-        ],
+        ),
+      ],
+    );
+  }
+
+  SizedBox _buildPageCategories() {
+    return SizedBox(
+      height: Get.height * 0.075, // Yüksekliği ayarlayın
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: controller.categories.length,
+        itemBuilder: (context, index) {
+          return _buildCategoryButton(context, controller.categories[index]);
+        },
       ),
     );
   }
 
-  Widget _buildTopTracksSection() {
+  Center _buidCircularProgressIndicator() {
+    return Center(
+      child: CircularProgressIndicator(
+        color: AppColor.majorelleBlue.getColor(), // Loading bar rengi
+      ),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      title: Image.asset(
+        AppImageUtility.getImagePath("logo", format: ImageFormat.png),
+        width: Get.height * 0.09,
+        height: Get.height * 0.09,
+      ),
+      backgroundColor: AppColor.white.getColor(), // Arka plan rengi
+      actions: [
+        Padding(
+          padding: AppPadding.instance.rightMedium,
+          child: Text(
+            "Catalog",
+            style: context.appGeneral.textTheme.headlineMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildTopTracksSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'Top Tracks',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: context.appGeneral.textTheme.titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             TextButton(
-              child: const Text(
+              child: Text(
                 "View All",
-                style: TextStyle(color: Color(0xffEF6B4A)),
+                style: TextStyle(color: AppColor.entanRed.getColor()),
               ),
               onPressed: () {
                 NavigatorController.instance.pushToPage(
@@ -100,9 +133,9 @@ class HomeView extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        AppSpaces.instance.vertical10,
         SizedBox(
-          height: 150,
+          height: Get.height * 0.24,
           width: double.infinity,
           child: Obx(() {
             return ListView.builder(
@@ -121,21 +154,22 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildPopularArtistsSection() {
+  Widget _buildPopularArtistsSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'Popular Artists',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: context.appGeneral.textTheme.titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             TextButton(
-              child: const Text(
+              child: Text(
                 "View All",
-                style: TextStyle(color: Color(0xffEF6B4A)),
+                style: TextStyle(color: AppColor.entanRed.getColor()),
               ),
               onPressed: () {
                 NavigatorController.instance.pushToPage(
@@ -167,21 +201,22 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildNewReleasesSection() {
+  Widget _buildNewReleasesSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'New Releases',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: context.appGeneral.textTheme.titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             TextButton(
-              child: const Text(
+              child: Text(
                 "View All",
-                style: TextStyle(color: Color(0xffEF6B4A)),
+                style: TextStyle(color: AppColor.entanRed.getColor()),
               ),
               onPressed: () {
                 NavigatorController.instance.pushToPage(
@@ -192,9 +227,9 @@ class HomeView extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        AppSpaces.instance.vertical10,
         SizedBox(
-          height: 150,
+          height: Get.height * 0.24,
           width: double.infinity,
           child: Obx(() {
             return ListView.builder(
@@ -216,23 +251,27 @@ class HomeView extends StatelessWidget {
   Widget _buildSearchBar() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xffF4F4FF),
-        borderRadius: BorderRadius.circular(12),
+        color: AppColor.maWhite.getColor(),
+        borderRadius: AppRadius.instance.normalBorderRadius,
       ),
       child: TextField(
+        controller: _searchController,
+        onChanged: (value) {
+          controller.filterTracks(value); // Filtreleme işlemi
+        },
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: 'Search',
-          contentPadding: const EdgeInsets.only(top: 12),
+          contentPadding: AppPadding.instance.topNormal,
           hintStyle: TextStyle(color: Colors.grey[500]),
-          prefixIcon: const Icon(Icons.search, color: Colors.grey),
-          suffixIcon: const Icon(Icons.filter_list, color: Colors.grey),
+          prefixIcon: Icon(Icons.search, color: AppColor.grey.getColor()),
+          suffixIcon: Icon(Icons.filter_list, color: AppColor.grey.getColor()),
         ),
       ),
     );
   }
 
-  Widget _buildCategoryButton(String title) {
+  Widget _buildCategoryButton(BuildContext context, String title) {
     return Obx(() {
       bool isSelected = controller.selectedCategory.value ==
           title; // Seçili olup olmadığını kontrol et
@@ -241,22 +280,18 @@ class HomeView extends StatelessWidget {
           controller.selectCategory(title); // Kategori seçildiğinde güncelle
         },
         child: Container(
-          margin: const EdgeInsets.only(right: 8.0),
+          margin: AppPadding.instance.rightSmall,
           padding: const EdgeInsets.symmetric(horizontal: 32.0),
           decoration: BoxDecoration(
-            color:
-                isSelected ? const Color(0xff6251DD) : const Color(0xffF4F4FF),
-            borderRadius: BorderRadius.circular(20),
+            color: isSelected
+                ? AppColor.majorelleBlue.getColor()
+                : AppColor.maWhite.getColor(),
+            borderRadius: AppRadius.instance.largeBorderRadius,
           ),
           child: Center(
-            child: Text(
-              title,
-              style: TextStyle(
-                color: isSelected
-                    ? Colors.white
-                    : const Color(0xff090937).withAlpha(128),
-              ),
-            ),
+            child: Text(title,
+                style: context.appGeneral.textTheme.bodyMedium?.copyWith(
+                    color: AppColor.black.getColor().withAlpha(128))),
           ),
         ),
       );

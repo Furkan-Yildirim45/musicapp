@@ -6,6 +6,7 @@ class TrackModel {
   final String lyrics;
   final int duration;
   final String audioUrl;
+  final String genre;
 
   TrackModel({
     required this.title,
@@ -15,6 +16,7 @@ class TrackModel {
     required this.lyrics,
     required this.duration,
     required this.audioUrl,
+    required this.genre,
   });
 
   factory TrackModel.fromMap(Map<String, dynamic> data) {
@@ -26,6 +28,7 @@ class TrackModel {
       lyrics: data['lyrics'],
       duration: data['duration'],
       audioUrl: data['audioUrl'],
+      genre: data['genre'],
     );
   }
 } 
